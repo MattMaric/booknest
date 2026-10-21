@@ -1,4 +1,5 @@
 import Copyright from "./components/Copyright";
+import Link from "next/link";
 
 const featuredBooks = [
   {
@@ -34,9 +35,9 @@ export default function Home() {
           </a>
 
           <div className="flex items-center gap-6 text-sm">
-            <a href="#featured" className="hover:text-amber-700">
+            <Link href="/books" className="hover:text-amber-700">
               Browse books
-            </a>
+            </Link>
             <button type="button" className="font-medium">
               Cart (0)
             </button>
