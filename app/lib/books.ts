@@ -5,6 +5,7 @@ export type Book = {
   price: number;
   category: string;
   description: string;
+  image: string;
 };
 
 export const books: Book[] = [
@@ -16,6 +17,7 @@ export const books: Book[] = [
     category: "Personal Development",
     description:
       "A practical guide to building good habits, breaking bad ones, and making small changes that lead to remarkable results.",
+    image: "/images/atomic-habits.jpg",
   },
   {
     id: "the-hobbit",
@@ -25,6 +27,7 @@ export const books: Book[] = [
     category: "Fantasy",
     description:
       "Join Bilbo Baggins on an unexpected journey filled with adventure, mysterious creatures, and a dragon guarding a treasure.",
+    image: "/images/the-hobbit.jpg",
   },
   {
     id: "clean-code",
@@ -34,5 +37,6 @@ export const books: Book[] = [
     category: "Technology",
     description:
       "A guide to writing readable, maintainable code and improving the craft of software development.",
+    image: "/images/clean-code.jpg",
   },
 ];

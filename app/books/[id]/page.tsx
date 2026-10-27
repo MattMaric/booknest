@@ -1,16 +1,14 @@
-
 import Link from "next/link";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { books } from "../../lib/books";
+import Image from "next/image";
 
 type BookDetailsPageProps = {
   params: Promise<{ id: string }>;
 };
 
-export default function BookDetailsPage({
-  params,
-}: BookDetailsPageProps) {
+export default function BookDetailsPage({ params }: BookDetailsPageProps) {
   return (
     <Suspense
       fallback={
@@ -32,9 +30,7 @@ export default function BookDetailsPage({
   );
 }
 
-async function BookDetailsContent({
-  params,
-}: BookDetailsPageProps) {
+async function BookDetailsContent({ params }: BookDetailsPageProps) {
   const { id } = await params;
   const book = books.find((book) => book.id === id);
 
@@ -45,51 +41,48 @@ async function BookDetailsContent({
   return (
     <main className="min-h-screen bg-stone-50 px-6 py-12 text-stone-900">
       <div className="mx-auto max-w-3xl">
-        <Link
-          href="/books"
-          className="text-sm text-amber-800 hover:underline"
-        >
+        <Link href="/books" className="text-sm text-amber-800 hover:underline">
           ← Back to all books
         </Link>
 
-        <article className="mt-8 rounded-2xl border border-stone-200 bg-white p-8 sm:p-12">
-          <p className="text-sm font-medium text-amber-800">
-            {book.category}
-          </p>
+        <div className="mt-8 grid gap-8 sm:grid-cols-[minmax(0,280px)_1fr] sm:items-start">
+          <div className="relative mx-auto aspect-[3/4] w-full max-w-[280px] overflow-hidden rounded-2xl bg-stone-100 shadow-sm">
+            <Image
+              src={book.image}
+              alt={`Cover of ${book.title}`}
+              fill
+              sizes="(max-width: 640px) 100vw, 280px"
+              className="object-contain p-4"
+              priority
+            />
+          </div>
 
-          <h1 className="mt-4 text-4xl font-bold tracking-tight">
-            {book.title}
-          </h1>
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-wide text-amber-800">
+              {book.category}
+            </p>
 
-          <p className="mt-3 text-lg text-stone-600">
-            by {book.author}
-          </p>
+            <h1 className="mt-3 text-4xl font-bold tracking-tight text-stone-900">
+              {book.title}
+            </h1>
 
-          <div className="my-8 border-t border-stone-200" />
+            <p className="mt-3 text-lg text-stone-600">by {book.author}</p>
 
-          <h2 className="text-lg font-semibold">
-            About this book
-          </h2>
+            <p className="mt-6 leading-7 text-stone-700">{book.description}</p>
 
-          <p className="mt-3 leading-7 text-stone-600">
-            {book.description}
-          </p>
-
-          <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
-            <p className="text-2xl font-bold">
+            <p className="mt-6 text-2xl font-bold text-stone-900">
               ${book.price.toFixed(2)}
             </p>
 
             <button
               type="button"
               disabled
-              className="cursor-not-allowed rounded-lg bg-amber-800 px-6 py-3 font-medium text-white opacity-60"
-              title="Purchasing will be implemented later"
+              className="mt-6 cursor-not-allowed rounded-lg bg-amber-800 px-5 py-3 font-semibold text-white opacity-60"
             >
-              Add to cart
+              Add to cart (coming soon)
             </button>
           </div>
-        </article>
+        </div>
       </div>
     </main>
   );

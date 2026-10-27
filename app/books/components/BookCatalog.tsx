@@ -1,9 +1,9 @@
-
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
 import type { Book } from "../../lib/books";
+import Image from "next/image";
 
 type BookCatalogProps = {
   books: Book[];
@@ -24,8 +24,7 @@ export default function BookCatalog({ books }: BookCatalogProps) {
       .includes(searchTerm.trim().toLowerCase());
 
     const matchesCategory =
-      selectedCategory === "All" ||
-      book.category === selectedCategory;
+      selectedCategory === "All" || book.category === selectedCategory;
 
     return matchesSearch && matchesCategory;
   });
@@ -73,8 +72,8 @@ export default function BookCatalog({ books }: BookCatalogProps) {
       </div>
 
       <p className="mt-6 text-sm text-stone-600" aria-live="polite">
-        {filteredBooks.length}{" "}
-        {filteredBooks.length === 1 ? "book" : "books"} found
+        {filteredBooks.length} {filteredBooks.length === 1 ? "book" : "books"}{" "}
+        found
       </p>
 
       {filteredBooks.length > 0 ? (
@@ -82,31 +81,41 @@ export default function BookCatalog({ books }: BookCatalogProps) {
           {filteredBooks.map((book) => (
             <article
               key={book.id}
-              className="rounded-xl border border-stone-200 bg-white p-6 transition hover:-translate-y-1 hover:shadow-md"
+              className="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md"
             >
-              <p className="text-sm text-amber-800">
-                {book.category}
-              </p>
+              <div className="relative aspect-[3/4] w-full bg-stone-100">
+                <Image
+                  src={book.image}
+                  alt={`Cover of ${book.title}`}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-contain p-4"
+                />
+              </div>
 
-              <h2 className="mt-3 text-xl font-semibold">
-                {book.title}
-              </h2>
+              <div className="p-5">
+                <p className="text-xs font-semibold uppercase tracking-wide text-amber-800">
+                  {book.category}
+                </p>
 
-              <p className="mt-2 text-sm text-stone-600">
-                by {book.author}
-              </p>
+                <h2 className="mt-2 text-xl font-bold text-stone-900">
+                  {book.title}
+                </h2>
 
-              <div className="mt-6 flex items-center justify-between gap-3">
-                <span className="font-semibold">
-                  ${book.price.toFixed(2)}
-                </span>
+                <p className="mt-1 text-sm text-stone-600">by {book.author}</p>
 
-                <Link
-                  href={`/books/${book.id}`}
-                  className="rounded-lg border border-stone-300 px-4 py-2 text-sm font-medium hover:bg-stone-100"
-                >
-                  View details
-                </Link>
+                <div className="mt-5 flex items-center justify-between gap-3">
+                  <span className="text-lg font-bold text-stone-900">
+                    ${book.price.toFixed(2)}
+                  </span>
+
+                  <Link
+                    href={`/books/${book.id}`}
+                    className="rounded-lg bg-amber-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-amber-900"
+                  >
+                    View details
+                  </Link>
+                </div>
               </div>
             </article>
           ))}
