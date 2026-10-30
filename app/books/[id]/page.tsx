@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { books } from "../../lib/books";
 import Image from "next/image";
+import AddToCartButton from "../../components/cart/AddToCartButton";
 
 type BookDetailsPageProps = {
   params: Promise<{ id: string }>;
@@ -73,14 +74,7 @@ async function BookDetailsContent({ params }: BookDetailsPageProps) {
             <p className="mt-6 text-2xl font-bold text-stone-900">
               ${book.price.toFixed(2)}
             </p>
-
-            <button
-              type="button"
-              disabled
-              className="mt-6 cursor-not-allowed rounded-lg bg-amber-800 px-5 py-3 font-semibold text-white opacity-60"
-            >
-              Add to cart (coming soon)
-            </button>
+            <AddToCartButton bookId={book.id} />
           </div>
         </div>
       </div>
