@@ -11,3 +11,13 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Book {
+  id          String   @id
+  title       String
+  author      String
+  price       Float
+  category    String
+  description String
+  image       String
+}
