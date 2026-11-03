@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { books } from "../../lib/books";
+import { getBookById } from "../../lib/books-db";
 import Image from "next/image";
 import AddToCartButton from "../../components/cart/AddToCartButton";
 
@@ -33,7 +33,7 @@ export default function BookDetailsPage({ params }: BookDetailsPageProps) {
 
 async function BookDetailsContent({ params }: BookDetailsPageProps) {
   const { id } = await params;
-  const book = books.find((book) => book.id === id);
+  const book = await getBookById(id);
 
   if (!book) {
     notFound();
