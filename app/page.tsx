@@ -1,28 +1,8 @@
-import Copyright from "./components/Copyright";
 
-const featuredBooks = [
-  {
-    id: 1,
-    title: "Atomic Habits",
-    author: "James Clear",
-    price: 18.99,
-    category: "Personal Development",
-  },
-  {
-    id: 2,
-    title: "The Hobbit",
-    author: "J.R.R. Tolkien",
-    price: 14.99,
-    category: "Fantasy",
-  },
-  {
-    id: 3,
-    title: "Clean Code",
-    author: "Robert C. Martin",
-    price: 32.99,
-    category: "Technology",
-  },
-];
+import Link from "next/link";
+import { Suspense } from "react";
+import Copyright from "./components/Copyright";
+import { getBooks } from "./lib/books-db";
 
 export default function Home() {
   return (
@@ -59,33 +39,13 @@ export default function Home() {
             <h2 className="mt-2 text-3xl font-bold">Featured books</h2>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredBooks.map((book) => (
-              <article
-                key={book.id}
-                className="rounded-xl border border-stone-200 p-6 transition hover:-translate-y-1 hover:shadow-md"
-              >
-                <p className="text-sm text-amber-800">{book.category}</p>
-
-                <h3 className="mt-3 text-xl font-semibold">{book.title}</h3>
-
-                <p className="mt-2 text-sm text-stone-600">by {book.author}</p>
-
-                <div className="mt-6 flex items-center justify-between">
-                  <span className="font-semibold">
-                    ${book.price.toFixed(2)}
-                  </span>
-
-                  <button
-                    type="button"
-                    className="rounded-lg border border-stone-300 px-4 py-2 text-sm font-medium transition hover:bg-stone-100"
-                  >
-                    View book
-                  </button>
-                </div>
-              </article>
-            ))}
-          </div>
+          <Suspense
+            fallback={
+              <p className="text-stone-600">Loading featured books...</p>
+            }
+          >
+            <FeaturedBooks />
+          </Suspense>
         </div>
       </section>
 
@@ -93,5 +53,39 @@ export default function Home() {
         <Copyright />
       </footer>
     </main>
+  );
+}
+
+async function FeaturedBooks() {
+  const books = await getBooks();
+
+  return (
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {books.slice(0, 3).map((book) => (
+        <article
+          key={book.id}
+          className="rounded-xl border border-stone-200 p-6 transition hover:-translate-y-1 hover:shadow-md"
+        >
+          <p className="text-sm text-amber-800">{book.category}</p>
+
+          <h3 className="mt-3 text-xl font-semibold">{book.title}</h3>
+
+          <p className="mt-2 text-sm text-stone-600">by {book.author}</p>
+
+          <div className="mt-6 flex items-center justify-between">
+            <span className="font-semibold">
+              ${book.price.toFixed(2)}
+            </span>
+
+            <Link
+              href={`/books/${book.id}`}
+              className="rounded-lg border border-stone-300 px-4 py-2 text-sm font-medium transition hover:bg-stone-100"
+            >
+              View book
+            </Link>
+          </div>
+        </article>
+      ))}
+    </div>
   );
 }
