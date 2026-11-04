@@ -27,7 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col bg-gray-50 text-gray-900 antialiased">
         <CartProvider>
           <header className="border-b border-stone-200 bg-white px-6 py-3">
             <div className="flex max-w-6xl items-center justify-between">
