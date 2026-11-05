@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "./components/cart/CartContext";
-import CartLink from "./components/cart/CartLink";
-import Link from "next/link";
+import Header from "./components/Header";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,25 +29,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col bg-gray-50 text-gray-900 antialiased">
         <CartProvider>
-          <header className="border-b border-stone-200 bg-white px-6 py-3">
-            <div className="flex max-w-6xl items-center justify-between">
-              <Link href="/" className="text-xl font-bold text-stone-900">
-                BookNest
-              </Link>
-
-              <nav className="flex items-center gap-6 text-sm">
-                <Link
-                  href="/books"
-                  className="text-stone-900 hover:text-amber-700"
-                >
-                  Browse books
-                </Link>
-
-                <CartLink />
-              </nav>
-            </div>
-          </header>
-
+          <Suspense
+            fallback={
+              <header className="border-b border-gray-200 bg-white">
+                <nav className="mx-auto flex max-w-7xl items-center px-6 py-4">
+                  <span className="text-2xl font-bold text-gray-900">
+                    BookNest
+                  </span>
+                </nav>
+              </header>
+            }
+          >
+            <Header />
+          </Suspense>
           {children}
         </CartProvider>
       </body>

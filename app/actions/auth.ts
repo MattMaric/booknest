@@ -3,6 +3,8 @@
 
 import { hash } from "bcryptjs";
 import { prisma } from "../lib/prisma";
+import { AuthError } from "next-auth";
+import { signIn, signOut } from "../../auth";
 
 type RegistrationResult = {
   success: boolean;
@@ -109,4 +111,58 @@ export async function registerUser(
 
     throw error;
   }
+}
+
+
+type LoginResult = {
+  success: boolean;
+  message: string;
+};
+
+export async function loginUser(
+  _previousState: LoginResult,
+  formData: FormData
+): Promise<LoginResult> {
+  const email = formData.get("email");
+  const password = formData.get("password");
+
+  if (
+    typeof email !== "string" ||
+    typeof password !== "string" ||
+    !email.trim() ||
+    !password
+  ) {
+    return {
+      success: false,
+      message: "Please enter your email and password.",
+    };
+  }
+
+  try {
+    await signIn("credentials", {
+      email: email.trim().toLowerCase(),
+      password,
+      redirectTo: "/",
+    });
+
+    return {
+      success: true,
+      message: "",
+    };
+  } catch (error) {
+    if (error instanceof AuthError) {
+      return {
+        success: false,
+        message: "Invalid email or password.",
+      };
+    }
+
+    throw error;
+  }
+}
+
+export async function logoutUser() {
+  await signOut({
+    redirectTo: "/",
+  });
 }
