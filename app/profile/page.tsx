@@ -1,16 +1,11 @@
 import { connection } from "next/server";
 import { Suspense } from "react";
-import { auth } from "../../auth";
-import { redirect } from "next/navigation";
+import { requireUser } from "../lib/auth-guard";
 
 async function ProfileContent() {
   await connection();
 
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login?callbackUrl=/profile");
-  }
+ const user = await requireUser("/profile");
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
@@ -19,11 +14,11 @@ async function ProfileContent() {
       </h2>
 
       <p className="mb-2 text-gray-700">
-        <strong>Name:</strong> {session.user.name}
+        <strong>Name:</strong> {user.name}
       </p>
 
       <p className="text-gray-700">
-        <strong>Email:</strong> {session.user.email}
+        <strong>Email:</strong> {user.email}
       </p>
     </div>
   );
