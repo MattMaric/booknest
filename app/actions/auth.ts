@@ -113,7 +113,6 @@ export async function registerUser(
   }
 }
 
-
 type LoginResult = {
   success: boolean;
   message: string;
@@ -125,6 +124,7 @@ export async function loginUser(
 ): Promise<LoginResult> {
   const email = formData.get("email");
   const password = formData.get("password");
+  const callbackUrl = formData.get("callbackUrl");
 
   if (
     typeof email !== "string" ||
@@ -138,11 +138,26 @@ export async function loginUser(
     };
   }
 
+  // Validate the redirect destination to prevent open redirects.
+  let redirectTo = "/";
+
+  if (typeof callbackUrl === "string") {
+    try {
+      const url = new URL(callbackUrl, "http://booknest.local");
+
+      if (url.origin === "http://booknest.local") {
+        redirectTo = `${url.pathname}${url.search}${url.hash}`;
+      }
+    } catch {
+      redirectTo = "/";
+    }
+  }
+
   try {
     await signIn("credentials", {
       email: email.trim().toLowerCase(),
       password,
-      redirectTo: "/",
+      redirectTo,
     });
 
     return {
