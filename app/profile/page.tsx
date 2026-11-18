@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { requireUser } from "../lib/auth-guard";
 import EditProfileForm from "./EditProfileForm";
 import { prisma } from "../lib/prisma";
+import ChangePasswordForm from "./ChangePasswordForm";
 
 async function ProfileContent() {
   await connection();
@@ -51,9 +52,7 @@ async function ProfileContent() {
           Manage your password and keep your account secure.
         </p>
 
-        <p className="mt-4 text-sm text-gray-500">
-          Password management coming soon.
-        </p>
+        <ChangePasswordForm />
       </section>
     </div>
   );
