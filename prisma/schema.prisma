@@ -20,6 +20,8 @@ model Book {
   category    String
   description String
   image       String
+
+  orderItems  OrderItem[]
 }
 
 model User {
@@ -29,4 +31,27 @@ model User {
   passwordHash String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+
+  orders       Order[]
+}
+
+model Order {
+  id        String      @id @default(cuid())
+  userId    String
+  total     Float
+  createdAt DateTime    @default(now())
+
+  user      User        @relation(fields: [userId], references: [id])
+  items     OrderItem[]
+}
+
+model OrderItem {
+  id       String @id @default(cuid())
+  orderId  String
+  bookId   String
+  quantity Int
+  price    Float
+
+  order    Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  book     Book   @relation(fields: [bookId], references: [id])
 }
