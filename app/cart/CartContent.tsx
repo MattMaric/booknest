@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "../components/cart/CartContext";
+import { useRouter } from "next/navigation";
 import type { Book } from "../lib/books";
 
 type CartContentProps = {
@@ -11,6 +12,7 @@ type CartContentProps = {
 
 export default function CartContent({ books }: CartContentProps) {
   const { items, isLoaded, removeFromCart, updateQuantity } = useCart();
+  const router = useRouter();
 
   if (!isLoaded) {
     return (
@@ -139,10 +141,10 @@ export default function CartContent({ books }: CartContentProps) {
               </p>
               <button
                 type="button"
-                disabled
-                className="mt-6 w-full cursor-not-allowed rounded-lg bg-amber-800 px-4 py-3 font-semibold text-white opacity-60"
+                onClick={() => router.push("/checkout")}
+                className="mt-6 w-full rounded-lg bg-amber-800 px-4 py-3 font-semibold text-white transition hover:bg-amber-900"
               >
-                Checkout (coming soon)
+                Proceed to Checkout
               </button>
             </aside>
           </div>
